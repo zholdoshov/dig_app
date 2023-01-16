@@ -23,6 +23,16 @@ class HomePage extends State<MainPage>{
 
   final taskDB = Hive.box('taskDB');
 
+  String statusDropdownValue = 'all';
+
+  List<String> _status = [
+    'all',
+    'open',
+    'in progress',
+    'completed',
+  ];
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,25 +50,42 @@ class HomePage extends State<MainPage>{
           child: Icon(
             Icons.menu,
           ),
-        )
-      ),
-      body: taskDB.isEmpty ? Center(child: Text('Nothing to do!')) : ListView.builder(
-        itemCount: taskDB.toMap().length,
-        itemBuilder: (context, index){
-          return Card(
-            child: ListTile(
-              title: Text(getData(index, _TASK_TITLE)),
-              subtitle: Text(getData(index, _TASK_STATUS)),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => taskDB.isEmpty ? Center(child: Text('Nothing to do!')) : TaskPage(index: index)),
-                );
-              },
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: PopupMenuButton(
+              itemBuilder: (context) => [
+
+              ],
             ),
-          );
-        },
+          ),
+        ],
+      ),
+      body: taskDB.isEmpty ? Center(child: Text('Nothing to do!')) : Padding(
+        padding: EdgeInsets.all(10.0),
+        child: ListView.builder(
+          itemCount: taskDB.toMap().length,
+          itemBuilder: (context, index){
+            return Card(
+              elevation: 4,
+              margin: EdgeInsets.symmetric(vertical: 10),
+              key: ValueKey(taskDB.getAt(index)[_TASK_TITLE]),
+              child: ListTile(
+                title: Text(getData(index, _TASK_TITLE)),
+                // subtitle: Text(getData(index, _TASK_STATUS)),
+                leading: Icon(Icons.assignment),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => taskDB.isEmpty ? Center(child: Text('Nothing to do!')) : TaskPage(index: index)),
+                  );
+                },
+              ),
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

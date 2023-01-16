@@ -11,6 +11,12 @@ void main() async {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
+    theme: ThemeData(
+      primarySwatch: Colors.deepPurple,
+      textTheme: TextTheme(
+        headline1: TextStyle(color: Colors.deepPurple),
+      ),
+    ),
     title: 'Task App',
     home: MainPage(),
 ));

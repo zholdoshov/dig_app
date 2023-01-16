@@ -7,7 +7,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 final _formKey = GlobalKey<FormState>();
 
 class AddTask extends StatefulWidget {
-//   const AddTask({Key? key}) : super(key: key);
 
   @override
   State<AddTask> createState() => _AddTaskState();
@@ -15,6 +14,7 @@ class AddTask extends StatefulWidget {
 
 class _AddTaskState extends State<AddTask> {
 
+  // call Hive local database
   final taskDB = Hive.box('taskDB');
 
   static const String _widgetTitle = 'Add task';
@@ -65,6 +65,7 @@ class _AddTaskState extends State<AddTask> {
                 decoration: InputDecoration(
                   labelText: 'Description',
                 ),
+                maxLines: 6,
                 controller: _descriptionController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -114,7 +115,7 @@ class _AddTaskState extends State<AddTask> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    taskDB.add([_titleController.text, _descriptionController.text, statusDropdownValue, '${lastUpdated.month}/${lastUpdated.day}/${lastUpdated.year}']);
+                    taskDB.add([_titleController.text, _descriptionController.text, statusDropdownValue, lastUpdated]);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text("Task '${_titleController.text}' created!"),
