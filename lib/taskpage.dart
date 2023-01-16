@@ -44,15 +44,36 @@ class _TaskPageState extends State<TaskPage> {
             padding: EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("Task '${taskDB.getAt(widget.index)[0].toString()}' deleted!"),
+                showCupertinoDialog(
+                  context: context,
+                  builder: (BuildContext context) => CupertinoAlertDialog(
+                    title: Text('Alert!'),
+                    content: Text('This task will be deleted from your local storage.'),
+                    actions: [
+                      CupertinoDialogAction(
+                        child: Text('Cancel'),
+                        isDefaultAction: true,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      CupertinoDialogAction(
+                        child: Text('Delete'),
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Task '${taskDB.getAt(widget.index)[0].toString()}' deleted!"),
+                            ),
+                          );
+                          taskDB.deleteAt(widget.index);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MainPage()),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                );
-                taskDB.deleteAt(widget.index);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MainPage()),
                 );
               },
               child: Icon(Icons.delete),
@@ -131,9 +152,6 @@ class _TaskPageState extends State<TaskPage> {
                         );
                       },
                     ),
-                    // Text(getData(_TASK_STATUS), style: TextStyle(fontSize: 15.0)),
-                    // Text(getDate()),
-                    // Text('Last update: ' + getData(_TASK_LAST_UPDATED), style: TextStyle(fontSize: 15.0)),
                   ],
                 ),
               ),

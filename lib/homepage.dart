@@ -53,10 +53,22 @@ class HomePage extends State<MainPage>{
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 20.0),
+            padding: EdgeInsets.only(right: 10.0),
             child: PopupMenuButton(
               itemBuilder: (context) => [
-
+                PopupMenuItem(
+                  child: Text('show all'),
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('${taskDB.toMap()}'),
+                      ),
+                    );
+                  }
+                ),
+                PopupMenuItem(child: Text('open')),
+                PopupMenuItem(child: Text('in progress')),
+                PopupMenuItem(child: Text('completed')),
               ],
             ),
           ),
@@ -67,19 +79,20 @@ class HomePage extends State<MainPage>{
         child: ListView.builder(
           itemCount: taskDB.toMap().length,
           itemBuilder: (context, index){
+            final task = taskDB.toMap()[index];
             return Card(
               elevation: 4,
               margin: EdgeInsets.symmetric(vertical: 10),
               key: ValueKey(taskDB.getAt(index)[_TASK_TITLE]),
               child: ListTile(
                 title: Text(getData(index, _TASK_TITLE)),
-                // subtitle: Text(getData(index, _TASK_STATUS)),
                 leading: Icon(Icons.assignment),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => taskDB.isEmpty ? Center(child: Text('Nothing to do!')) : TaskPage(index: index)),
+                      builder: (context) => taskDB.isEmpty ? Center(child: Text('Nothing to do!')) : TaskPage(index: index),
+                    ),
                   );
                 },
               ),
