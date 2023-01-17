@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/taskModel.dart';
 import 'package:myapp/homepage.dart';
+import 'package:myapp/taskStatusModel.dart';
+import 'package:myapp/appState.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-final _formKey = GlobalKey<FormState>();
 
 class AddTask extends StatefulWidget {
 
@@ -14,20 +14,13 @@ class AddTask extends StatefulWidget {
 
 class _AddTaskState extends State<AddTask> {
 
-  // call Hive local database
-  final taskDB = Hive.box('taskDB');
 
   static const String _widgetTitle = 'Add task';
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  String statusDropdownValue = 'open';
-  DateTime lastUpdated = DateTime.now();
+  TaskStatus _statusDropdownValue = TaskStatus.Open;
 
-  List<String> _status = [
-    'open',
-    'in progress',
-    'completed',
-  ];
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -41,96 +34,77 @@ class _AddTaskState extends State<AddTask> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(_widgetTitle),
-        // backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Title',
-                ),
-                controller: _titleController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Empty field!';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Description',
-                ),
-                maxLines: 6,
-                controller: _descriptionController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Empty field!';
-                  }
-                  return null;
-                },
-              ),
-              DropdownButton<String>(
-                onChanged: (String? newValue) {
-                  setState(() {
-                    statusDropdownValue = newValue!;
-                  });
-                },
-                value: statusDropdownValue,
-                items: _status.map<DropdownMenuItem<String>>(
-                      (String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  },
-                ).toList(),
-
-              ),
-              CupertinoButton(
-                child: Text('${lastUpdated.month}/${lastUpdated.day}/${lastUpdated.year}'),
-                onPressed: () {
-                  showCupertinoModalPopup(
-                    context: context,
-                    builder: (BuildContext context) => SizedBox(
-                      height: 250,
-                      child: CupertinoDatePicker(
-                        backgroundColor: Colors.white,
-                        initialDateTime: lastUpdated,
-                        onDateTimeChanged: (DateTime newTime) {
-                          setState(() {
-                            lastUpdated = newTime;
-                          });
-                        },
-                        mode: CupertinoDatePickerMode.date,
-                      ),
+        child: Column(
+          children: [
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Title',
                     ),
+                    controller: _titleController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Empty field!';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Description',
+                    ),
+                    maxLines: 6,
+                    controller: _descriptionController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Empty field!';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+              ),
+            ),
+            DropdownButton<TaskStatus>(
+              onChanged: (TaskStatus? newValue) {
+                setState(() {
+                  _statusDropdownValue = newValue!;
+                });
+              },
+              value: _statusDropdownValue,
+              items: TaskStatus.values.map<DropdownMenuItem<TaskStatus>>(
+                    (TaskStatus value) {
+                  return DropdownMenuItem<TaskStatus>(
+                    value: value,
+                    child: Text(value.name),
                   );
                 },
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    taskDB.add([_titleController.text, _descriptionController.text, statusDropdownValue, lastUpdated]);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Task '${_titleController.text}' created!"),
-                      ),
-                    );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MainPage()),
-                    );
-                  }
-                },
-                child: const Text('Add task'),
-              ),
-            ],
-          ),
+              ).toList(),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  AppState.addTask(_titleController.value.text,_descriptionController.value.text, _statusDropdownValue);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Task '${_titleController.text}' created!"),
+                    ),
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainPage()),
+                  );
+                }
+              },
+              child: const Text('Add task'),
+            ),
+          ],
         ),
       ),
     );

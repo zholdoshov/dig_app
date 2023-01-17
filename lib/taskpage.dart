@@ -2,14 +2,20 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/taskModel.dart';
+import 'package:myapp/appState.dart';
+import 'package:myapp/taskStatusModel.dart';
 import 'package:myapp/homepage.dart';
+import 'package:intl/intl.dart';
 
 
 class TaskPage extends StatefulWidget {
 
-  final int index;
+  Task task;
+  TaskStatus newStatus = TaskStatus.Open;
 
-  TaskPage({super.key, required this.index});
+  TaskPage({super.key, required this.task}){
+    newStatus = task.status;
+  }
 
   @override
   State<TaskPage> createState() => _TaskPageState();
@@ -17,22 +23,7 @@ class TaskPage extends StatefulWidget {
 
 class _TaskPageState extends State<TaskPage> {
 
-  static const String _title = 'Task';
-
-  static final int _TASK_TITLE = 0;
-  static final int _TASK_DESCRIPTION = 1;
-  static final int _TASK_STATUS = 2;
-  static final int _TASK_LAST_UPDATED = 3;
-
-  final taskDB = Hive.box('taskDB');
-
-  DateTime dateTime = DateTime.now();
-
-  List<String> _status = [
-    'open',
-    'in progress',
-    'completed',
-  ];
+  static const String _title = 'Task Details';
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +53,10 @@ class _TaskPageState extends State<TaskPage> {
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text("Task '${taskDB.getAt(widget.index)[0].toString()}' deleted!"),
+                              content: Text("Task '${widget.task.title}' deleted!"),
                             ),
                           );
-                          taskDB.deleteAt(widget.index);
+                          AppState.removeTaskById(widget.task.id);
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => MainPage()),
@@ -90,7 +81,7 @@ class _TaskPageState extends State<TaskPage> {
               padding: EdgeInsets.only(left: 4.0, top: 5.0, right: 4.0, bottom: 8.0),
               child: Container(
                 alignment: Alignment.topLeft,
-                child: Text(getData(_TASK_TITLE), style: TextStyle(fontSize: 20.0)),
+                child: Text(widget.task.title, style: TextStyle(fontSize: 20.0)),
               ),
             ),
             Divider(),
@@ -104,7 +95,7 @@ class _TaskPageState extends State<TaskPage> {
                 //   border: Border.all(color: Colors.grey, width: 2.0, style: BorderStyle.solid),
                 //   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 // ),
-                child: Text(getData(_TASK_DESCRIPTION), style: TextStyle(fontSize: 15.0)),
+                child: Text(widget.task.description, style: TextStyle(fontSize: 15.0)),
               ),
             ),
             Divider(),
@@ -115,50 +106,44 @@ class _TaskPageState extends State<TaskPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    DropdownButton<String>(
-                      onChanged: (String? newValue) {
+                    Text('Status: '),
+                    DropdownButton<TaskStatus>(
+                      onChanged: (TaskStatus? newValue) {
                         setState(() {
-                          taskDB.getAt(widget.index)[_TASK_STATUS] = newValue!;
+                          widget.newStatus = newValue!;
                         });
                       },
-                      value: taskDB.getAt(widget.index)[_TASK_STATUS],
-                      items: _status.map<DropdownMenuItem<String>>(
-                            (String value) {
-                          return DropdownMenuItem<String>(
+                      value: widget.newStatus,
+                      items: TaskStatus.values.map<DropdownMenuItem<TaskStatus>>(
+                            (TaskStatus value) {
+                          return DropdownMenuItem<TaskStatus>(
                             value: value,
-                            child: Text(value),
+                            child: Text(value.name),
                           );
                         },
                       ).toList(),
                     ),
-                    CupertinoButton(
-                      child: Text('${getData(_TASK_LAST_UPDATED)}'.split(" ")[0]),
-                      onPressed: () {
-                        showCupertinoModalPopup(
-                          context: context,
-                          builder: (BuildContext context) => SizedBox(
-                            height: 250,
-                            child: CupertinoDatePicker(
-                              backgroundColor: Colors.white,
-                              initialDateTime: taskDB.getAt(widget.index)[_TASK_LAST_UPDATED],
-                              onDateTimeChanged: (DateTime newTime) {
-                                setState(() {
-                                  taskDB.getAt(widget.index)[_TASK_LAST_UPDATED] = newTime;
-                                });
-                              },
-                              mode: CupertinoDatePickerMode.date,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(5.0),
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Last update: '),
+                    Text(DateFormat('yyyy-MM-dd  kk:mm').format(widget.task.updateTime).toString()),
                   ],
                 ),
               ),
             ),
             ElevatedButton(
               onPressed: () {
-                taskDB.putAt(widget.index, [getData(_TASK_TITLE), getData(_TASK_DESCRIPTION), taskDB.getAt(widget.index)[_TASK_STATUS], taskDB.getAt(widget.index)[_TASK_LAST_UPDATED]]);
+                widget.task.status = widget.newStatus;
+                widget.task.updateTime = DateTime.now();
+                AppState.sortTasks();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text("Task updated!"),
@@ -177,19 +162,4 @@ class _TaskPageState extends State<TaskPage> {
     );
   }
 
-  getData(value) {
-    return taskDB.getAt(widget.index)[value].toString();
-  }
-
-  getDate() {
-    dateTime = DateTime.parse(getData(_TASK_LAST_UPDATED));
-    String date = '${dateTime.month}-${dateTime.day}-${dateTime.year}';
-    return date;
-  }
-
-  getDateToString() {
-    dateTime = DateTime.parse(getData(_TASK_LAST_UPDATED));
-    String date = '${dateTime.month}-${dateTime.day}-${dateTime.year}';
-    return date;
-  }
 }
