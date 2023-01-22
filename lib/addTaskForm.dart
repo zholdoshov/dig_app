@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:myapp/taskModel.dart';
-import 'package:myapp/homepage.dart';
-import 'package:myapp/taskStatusModel.dart';
+import 'package:myapp/models/taskModel.dart';
+import 'package:myapp/homePage.dart';
+import 'package:myapp/models/taskStatusModel.dart';
 import 'package:myapp/appState.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 

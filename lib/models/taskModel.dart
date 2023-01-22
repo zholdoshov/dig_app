@@ -1,4 +1,4 @@
-import 'package:myapp/taskStatusModel.dart';
+import 'package:myapp/models/taskStatusModel.dart';
 
 class Task{
   int id;

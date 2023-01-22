@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/taskModel.dart';
-import 'package:myapp/taskpage.dart';
+import 'package:myapp/models/taskModel.dart';
+import 'package:myapp/taskPage.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:myapp/addtaskform.dart';
+import 'package:myapp/addTaskForm.dart';
 import 'package:myapp/appState.dart';
-import 'package:myapp/taskStatusModel.dart';
+import 'package:myapp/models/taskStatusModel.dart';
 import 'package:flutter/services.dart' as rootBundle;
 
 

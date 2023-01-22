@@ -1,5 +1,5 @@
-import 'package:myapp/taskModel.dart';
-import 'package:myapp/taskStatusModel.dart';
+import 'package:myapp/models/taskModel.dart';
+import 'package:myapp/models/taskStatusModel.dart';
 
 class AppState {
 
