@@ -2,9 +2,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/models/taskModel.dart';
-import 'package:myapp/appState.dart';
+import 'package:myapp/util/appState.dart';
 import 'package:myapp/models/taskStatusModel.dart';
-import 'package:myapp/homePage.dart';
+import 'package:myapp/screens/homePage.dart';
 import 'package:intl/intl.dart';
 
 

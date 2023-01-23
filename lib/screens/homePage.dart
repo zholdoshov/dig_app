@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/models/taskModel.dart';
-import 'package:myapp/taskPage.dart';
+import 'package:myapp/screens/taskPage.dart';
+import 'package:myapp/screens/feedPage.dart';
+import 'package:myapp/screens/profilePage.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:myapp/addTaskForm.dart';
-import 'package:myapp/appState.dart';
+import 'package:myapp/forms/addTaskForm.dart';
+import 'package:myapp/util/appState.dart';
 import 'package:myapp/models/taskStatusModel.dart';
 import 'package:flutter/services.dart' as rootBundle;
 
@@ -29,6 +31,7 @@ class HomePage extends State<MainPage>{
 
   String? _selectedFilterValue = "All";
   List<Task> _visibleTasks = AppState.getFilteredTasks(null);
+  int currentBotNavIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +118,25 @@ class HomePage extends State<MainPage>{
           );
         },
         child: const Icon(Icons.add),
+      ),
+      bottomNavigationBar: BottomNavigationBar (
+        currentIndex: currentBotNavIndex,
+        showUnselectedLabels: false,
+        onTap: (index) => setState(() => currentBotNavIndex = index),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Feed',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }

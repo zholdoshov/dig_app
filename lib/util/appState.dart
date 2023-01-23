@@ -1,11 +1,12 @@
 import 'package:myapp/models/taskModel.dart';
 import 'package:myapp/models/taskStatusModel.dart';
+import 'package:provider/provider.dart';
 
 class AppState {
 
-  static int _increment_id = 0;
-
   static List<Task> _tasks = [];
+
+  static int _increment_id = 0;
 
   static void addTask(
       String title,
