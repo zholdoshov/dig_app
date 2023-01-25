@@ -1,11 +1,14 @@
 import 'package:myapp/models/taskStatusModel.dart';
+import 'package:myapp/models/taskRelationModel.dart';
+import 'package:tuple/tuple.dart';
 
-class Task{
+class Task {
   int id;
   String title;
   String description;
   TaskStatus status;
   DateTime updateTime;
+  Set<Tuple2<TaskRelation, Task>> relatedTasks = new Set();
 
   Task({
     required this.id,

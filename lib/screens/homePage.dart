@@ -94,15 +94,17 @@ class HomePage extends State<MainPage>{
                   key: ValueKey(task.id),
                   child: ListTile(
                     title: Text(task.title),
-                    leading: Icon(Icons.assignment),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TaskPage(task: task),
-                        ),
-                      );
-                    },
+                    trailing: IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TaskPage(task: task),
+                          ),
+                        );
+                      }
+                    ),
                   ),
                 );
               },

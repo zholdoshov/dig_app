@@ -16,7 +16,7 @@ function(list_prepend LIST_NAME PREFIX)
     foreach(element ${${LIST_NAME}})
         list(APPEND NEW_LIST "${PREFIX}${element}")
     endforeach(element)
-    set(${LIST_NAME} "${NEW_LIST}" PARENT_SCOPE)
+    set(${LIST_NAME} "${NEW_LIST}" Clones_SCOPE)
 endfunction()
 
 # === Flutter Library ===
@@ -28,11 +28,11 @@ pkg_check_modules(GIO REQUIRED IMPORTED_TARGET gio-2.0)
 
 set(FLUTTER_LIBRARY "${EPHEMERAL_DIR}/libflutter_linux_gtk.so")
 
-# Published to parent scope for install step.
-set(FLUTTER_LIBRARY ${FLUTTER_LIBRARY} PARENT_SCOPE)
-set(FLUTTER_ICU_DATA_FILE "${EPHEMERAL_DIR}/icudtl.dat" PARENT_SCOPE)
-set(PROJECT_BUILD_DIR "${PROJECT_DIR}/build/" PARENT_SCOPE)
-set(AOT_LIBRARY "${PROJECT_DIR}/build/lib/libapp.so" PARENT_SCOPE)
+# Published to Clones scope for install step.
+set(FLUTTER_LIBRARY ${FLUTTER_LIBRARY} Clones_SCOPE)
+set(FLUTTER_ICU_DATA_FILE "${EPHEMERAL_DIR}/icudtl.dat" Clones_SCOPE)
+set(PROJECT_BUILD_DIR "${PROJECT_DIR}/build/" Clones_SCOPE)
+set(AOT_LIBRARY "${PROJECT_DIR}/build/lib/libapp.so" Clones_SCOPE)
 
 list(APPEND FLUTTER_LIBRARY_HEADERS
   "fl_basic_message_channel.h"

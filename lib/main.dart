@@ -5,6 +5,7 @@ import 'package:myapp/screens/homePage.dart';
 import 'package:myapp/screens/profilePage.dart';
 import 'package:myapp/screens/feedPage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path/path.dart';
 
 const _routeTitles = {
   '/home': 'Home Page',
