@@ -145,6 +145,14 @@ class _AddTaskState extends State<AddTask> {
                                 },
                                 child: Text(relatedTask.item2.title),
                               ),
+                              IconButton(
+                                onPressed: (){
+                                  setState(() {
+                                    widget.modifiedRelatedTasks.removeWhere((element) => element == relatedTask);
+                                  });
+                                },
+                                icon: Icon(Icons.delete),
+                              ),
                             ],
                           ),
                         );
@@ -216,7 +224,7 @@ class _AddTaskState extends State<AddTask> {
                   AppState.addTask(widget._titleController.value.text,widget._descriptionController.value.text, widget.modifiedStatus);
                   AppState.getFirstTask().relatedTasks = widget.modifiedRelatedTasks;
                   for (int i = 0; i < widget.modifiedRelatedTasks.length; i++) {
-                    TaskRelation tempTaskRelation = widget.modifiedRelatedTasks.elementAt(i).item1;
+                    TaskRelation tempTaskRelation = widget.modifiedRelatedTasks.elementAt(i).item1.relationOpposite;
                     Task tempTask = widget.modifiedRelatedTasks.elementAt(i).item2;
                     tempTask.relatedTasks.add(new Tuple2(tempTaskRelation, AppState.getFirstTask()));
                   }

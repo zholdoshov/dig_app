@@ -11,14 +11,12 @@ import 'package:myapp/util/appState.dart';
 import 'package:myapp/models/taskStatusModel.dart';
 import 'package:flutter/services.dart' as rootBundle;
 
-
 class MainPage extends StatefulWidget {
   HomePage createState() => HomePage();
 }
 
-class HomePage extends State<MainPage>{
-  _getRequests() async {
-  }
+class HomePage extends State<MainPage> {
+  _getRequests() async {}
 
   static const String _title = 'Nurulla';
 
@@ -40,7 +38,7 @@ class HomePage extends State<MainPage>{
         title: Text(_title),
         // backgroundColor: Colors.deepPurple,
         leading: GestureDetector(
-          onTap: (){
+          onTap: () {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Coming soon.'),
@@ -64,15 +62,16 @@ class HomePage extends State<MainPage>{
                   onChanged: (String? newValue) {
                     setState(() {
                       _selectedFilterValue = newValue;
-                      _visibleTasks = AppState.getFilteredTasks(_filters[newValue]);
+                      _visibleTasks =
+                          AppState.getFilteredTasks(_filters[newValue]);
                     });
                   },
                   value: _selectedFilterValue,
                   items: _filters.keys.map<DropdownMenuItem<String>>(
-                        (String entry) {
-                          return DropdownMenuItem<String>(
-                            value: entry,
-                            child: Text(entry),
+                    (String entry) {
+                      return DropdownMenuItem<String>(
+                        value: entry,
+                        child: Text(entry),
                       );
                     },
                   ).toList(),
@@ -86,7 +85,7 @@ class HomePage extends State<MainPage>{
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: _visibleTasks.length,
-              itemBuilder: (context, index){
+              itemBuilder: (context, index) {
                 final task = _visibleTasks[index];
                 return Card(
                   elevation: 4,
@@ -95,16 +94,15 @@ class HomePage extends State<MainPage>{
                   child: ListTile(
                     title: Text(task.title),
                     trailing: IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TaskPage(task: task),
-                          ),
-                        );
-                      }
-                    ),
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TaskPage(task: task),
+                            ),
+                          );
+                        }),
                   ),
                 );
               },
@@ -121,7 +119,7 @@ class HomePage extends State<MainPage>{
         },
         child: const Icon(Icons.add),
       ),
-      bottomNavigationBar: BottomNavigationBar (
+      bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentBotNavIndex,
         showUnselectedLabels: false,
         onTap: (index) => setState(() => currentBotNavIndex = index),

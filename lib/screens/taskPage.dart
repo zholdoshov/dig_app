@@ -1,6 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:myapp/screens/appBarTitle.dart';
 import 'package:myapp/models/taskModel.dart';
 import 'package:myapp/models/taskRelationModel.dart';
 import 'package:myapp/util/appState.dart';
@@ -44,8 +45,7 @@ class _TaskPageState extends State<TaskPage> {
                   context: context,
                   builder: (BuildContext context) => CupertinoAlertDialog(
                     title: Text('Alert!'),
-                    content: Text(
-                        'This task will be deleted from your local storage.'),
+                    content: Text('This task will be deleted from your local storage.'),
                     actions: [
                       CupertinoDialogAction(
                         child: Text('Cancel'),
@@ -206,7 +206,7 @@ class _TaskPageState extends State<TaskPage> {
                                 onPressed: (){
                                   setState(() {
                                     widget.task.relatedTasks.removeWhere((element) => element == relatedTask);
-                                    relatedTask.item2.relatedTasks.removeWhere((element) => element.item1 == relatedTask.item1 && element.item2 == widget.task);
+                                    relatedTask.item2.relatedTasks.removeWhere((element) => element.item1 == relatedTask.item1.relationOpposite && element.item2 == widget.task);
                                   });
                                 },
                                 icon: Icon(Icons.delete),
@@ -284,9 +284,9 @@ class _TaskPageState extends State<TaskPage> {
                 widget.task.updateTime = DateTime.now();
                 widget.task.relatedTasks = widget.modifiedRelatedTasks;
                 for (int i = 0; i < widget.modifiedRelatedTasks.length; i++) {
-                  TaskRelation tempTaskRelation = widget.modifiedRelatedTasks.elementAt(i).item1;
-                  Task tempTask = widget.modifiedRelatedTasks.elementAt(i).item2;
-                  tempTask.relatedTasks.add(new Tuple2(tempTaskRelation, widget.task));
+                  TaskRelation tempTaskRelation = widget.modifiedRelatedTasks.elementAt(i).item1.relationOpposite;
+                  Task relatedTask = widget.modifiedRelatedTasks.elementAt(i).item2;
+                  relatedTask.relatedTasks.add(new Tuple2(tempTaskRelation, widget.task));
                 }
                 AppState.sortTasks();
                 ScaffoldMessenger.of(context).showSnackBar(
