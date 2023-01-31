@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, constant_identifier_names
+
 enum TaskRelation {
   SubTask(" is subtask of "),
   ParentTask(" is parent of "),
@@ -35,7 +37,7 @@ extension TaskRelationExtension on TaskRelation {
       case TaskRelation.Related:
         return TaskRelation.Related;
       default:
-        throw new Exception("There's no opposite relation for " +  this.value);
+        throw Exception("There's no opposite relation for $value");
     }
   }
 }

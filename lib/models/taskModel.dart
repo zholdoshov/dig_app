@@ -8,14 +8,12 @@ class Task {
   String description;
   TaskStatus status;
   DateTime updateTime;
-  Set<Tuple2<TaskRelation, Task>> relatedTasks = new Set();
+  Set<Tuple2<TaskRelation, Task>> relatedTasks = {};
 
-  Task({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.status,
-    required this.updateTime
-  });
+  Task(
+      {required this.id,
+      required this.title,
+      required this.description,
+      required this.status,
+      required this.updateTime});
 }
-

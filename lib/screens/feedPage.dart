@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class FeedPage extends StatelessWidget {
@@ -7,9 +9,9 @@ class FeedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feed'),
+        title: const Text('Feed'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Feed Page'),
       ),
     );

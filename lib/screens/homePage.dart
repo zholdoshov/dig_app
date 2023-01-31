@@ -1,26 +1,23 @@
-import 'dart:convert';
-import 'package:hive_flutter/hive_flutter.dart';
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:myapp/models/taskModel.dart';
 import 'package:myapp/screens/taskPage.dart';
-import 'package:myapp/screens/feedPage.dart';
-import 'package:myapp/screens/profilePage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:myapp/forms/addTaskForm.dart';
 import 'package:myapp/util/appState.dart';
 import 'package:myapp/models/taskStatusModel.dart';
-import 'package:flutter/services.dart' as rootBundle;
 
 class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
+  @override
   HomePage createState() => HomePage();
 }
 
 class HomePage extends State<MainPage> {
-  _getRequests() async {}
-
   static const String _title = 'Nurulla';
 
-  Map<String, TaskStatus?> _filters = {
+  final Map<String, TaskStatus?> _filters = {
     "All": null,
     "Open": TaskStatus.Open,
     "In Progress": TaskStatus.InProgress,
@@ -35,17 +32,17 @@ class HomePage extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_title),
+        title: const Text(_title),
         // backgroundColor: Colors.deepPurple,
         leading: GestureDetector(
           onTap: () {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text('Coming soon.'),
               ),
             );
           },
-          child: Icon(
+          child: const Icon(
             Icons.menu,
           ),
         ),
@@ -53,11 +50,11 @@ class HomePage extends State<MainPage> {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text('Filter by: '),
+                const Text('Filter by: '),
                 DropdownButton<String>(
                   onChanged: (String? newValue) {
                     setState(() {
@@ -80,7 +77,7 @@ class HomePage extends State<MainPage> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
@@ -89,12 +86,12 @@ class HomePage extends State<MainPage> {
                 final task = _visibleTasks[index];
                 return Card(
                   elevation: 4,
-                  margin: EdgeInsets.symmetric(vertical: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
                   key: ValueKey(task.id),
                   child: ListTile(
                     title: Text(task.title),
                     trailing: IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -123,16 +120,17 @@ class HomePage extends State<MainPage> {
         currentIndex: currentBotNavIndex,
         showUnselectedLabels: false,
         onTap: (index) => setState(() => currentBotNavIndex = index),
+        // ignore: prefer_const_literals_to_create_immutables
         items: [
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             label: 'Feed',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
