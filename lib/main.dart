@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/homePage.dart';
-import 'package:myapp/screens/profilePage.dart';
-import 'package:myapp/screens/feedPage.dart';
+import 'package:myapp/screens/home_page.dart';
+import 'package:myapp/screens/profile_page.dart';
+import 'package:myapp/screens/feed_page.dart';
 import 'package:go_router/go_router.dart';
 
 final _router = GoRouter(initialLocation: '/home', routes: [

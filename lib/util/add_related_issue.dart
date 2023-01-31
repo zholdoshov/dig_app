@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
-import '../models/taskModel.dart';
-import '../models/taskRelationModel.dart';
-import '../screens/taskPage.dart';
-import 'appState.dart';
+import '../models/task_model.dart';
+import '../models/task_relation_model.dart';
+import '../screens/task_page.dart';
+import 'app_state.dart';
 
 class AddRelatedIssue extends StatefulWidget {
   AddRelatedIssue({

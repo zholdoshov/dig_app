@@ -2,15 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:myapp/models/taskModel.dart';
-import 'package:myapp/models/taskRelationModel.dart';
-import 'package:myapp/util/appState.dart';
-import 'package:myapp/models/taskStatusModel.dart';
-import 'package:myapp/screens/homePage.dart';
+import 'package:myapp/models/task_model.dart';
+import 'package:myapp/models/task_relation_model.dart';
+import 'package:myapp/util/app_state.dart';
+import 'package:myapp/models/task_status_model.dart';
+import 'package:myapp/screens/home_page.dart';
 import 'package:tuple/tuple.dart';
 import 'package:intl/intl.dart';
 
-import '../util/addRelatedIssue.dart';
+import '../util/add_related_issue.dart';
 
 class TaskPage extends StatefulWidget {
   Task task;

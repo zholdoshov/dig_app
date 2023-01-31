@@ -1,11 +1,11 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:myapp/models/taskModel.dart';
-import 'package:myapp/screens/taskPage.dart';
-import 'package:myapp/forms/addTaskForm.dart';
-import 'package:myapp/util/appState.dart';
-import 'package:myapp/models/taskStatusModel.dart';
+import 'package:myapp/models/task_model.dart';
+import 'package:myapp/screens/task_page.dart';
+import 'package:myapp/forms/add_task_form.dart';
+import 'package:myapp/util/app_state.dart';
+import 'package:myapp/models/task_status_model.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
