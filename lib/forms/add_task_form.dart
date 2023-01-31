@@ -90,42 +90,40 @@ class _AddTaskState extends State<AddTask> {
                 },
               ).toList(),
             ),
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  AppState.addTask(
-                      widget._titleController.value.text,
-                      widget._descriptionController.value.text,
-                      widget.modifiedStatus);
-                  AppState.getFirstTask().relatedTasks =
-                      widget.modifiedRelatedTasks;
-                  for (int i = 0; i < widget.modifiedRelatedTasks.length; i++) {
-                    TaskRelation tempTaskRelation = widget.modifiedRelatedTasks
-                        .elementAt(i)
-                        .item1
-                        .relationOpposite;
-                    Task tempTask =
-                        widget.modifiedRelatedTasks.elementAt(i).item2;
-                    tempTask.relatedTasks
-                        .add(Tuple2(tempTaskRelation, AppState.getFirstTask()));
-                  }
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                          "Task '${widget._titleController.text}' created!"),
-                    ),
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MainPage()),
-                  );
-                }
-              },
-              child: const Text('Add task'),
-            ),
+            createTask(context),
           ],
         ),
       ),
+    );
+  }
+
+  // createTask method for the 'Add task' button
+  ElevatedButton createTask(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        if (_formKey.currentState!.validate()) {
+          AppState.addTask(widget._titleController.value.text,
+              widget._descriptionController.value.text, widget.modifiedStatus);
+          AppState.getFirstTask().relatedTasks = widget.modifiedRelatedTasks;
+          for (int i = 0; i < widget.modifiedRelatedTasks.length; i++) {
+            TaskRelation tempTaskRelation =
+                widget.modifiedRelatedTasks.elementAt(i).item1.relationOpposite;
+            Task tempTask = widget.modifiedRelatedTasks.elementAt(i).item2;
+            tempTask.relatedTasks
+                .add(Tuple2(tempTaskRelation, AppState.getFirstTask()));
+          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Task '${widget._titleController.text}' created!"),
+            ),
+          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MainPage()),
+          );
+        }
+      },
+      child: const Text('Add task'),
     );
   }
 }

@@ -5,7 +5,7 @@ import 'package:tuple/tuple.dart';
 
 import '../models/task_model.dart';
 import '../models/task_relation_model.dart';
-import '../screens/task_page.dart';
+import '../screens/task_details.dart';
 import 'app_state.dart';
 
 class AddRelatedIssue extends StatefulWidget {
@@ -16,7 +16,7 @@ class AddRelatedIssue extends StatefulWidget {
     required this.modifiedRelatedTasks,
   }) : super(key: key);
 
-  final TaskPage widget;
+  final TaskDetails widget;
   final Task task;
   Set<Tuple2<TaskRelation, Task>> modifiedRelatedTasks = {};
 
@@ -76,7 +76,7 @@ class _AddRelatedIssueState extends State<AddRelatedIssue> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => TaskPage(task: task),
+                                  builder: (context) => TaskDetails(task: task),
                                 ),
                               );
                             },
@@ -144,22 +144,27 @@ class _AddRelatedIssueState extends State<AddRelatedIssue> {
                 },
               ).toList(),
             ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  if (selectedTask != null) {
-                    widget.modifiedRelatedTasks
-                        .add(Tuple2(selectedRelation, selectedTask!));
-                  }
-                  selectedTask = null;
-                  selectedRelation = TaskRelation.SubTask;
-                });
-              },
-              child: const Text('Add'),
-            ),
+            addRelation(),
           ],
         ),
       ],
+    );
+  }
+
+  // addRelation method to add the relation between chosen tasks
+  ElevatedButton addRelation() {
+    return ElevatedButton(
+      onPressed: () {
+        setState(() {
+          if (selectedTask != null) {
+            widget.modifiedRelatedTasks
+                .add(Tuple2(selectedRelation, selectedTask!));
+          }
+          selectedTask = null;
+          selectedRelation = TaskRelation.SubTask;
+        });
+      },
+      child: const Text('Add'),
     );
   }
 }

@@ -1,7 +1,6 @@
 // ignore_for_file: file_names, must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:myapp/models/task_model.dart';
 import 'package:myapp/models/task_relation_model.dart';
 import 'package:myapp/util/app_state.dart';
@@ -11,23 +10,24 @@ import 'package:tuple/tuple.dart';
 import 'package:intl/intl.dart';
 
 import '../util/add_related_issue.dart';
+import '../util/delete_task.dart';
 
-class TaskPage extends StatefulWidget {
+class TaskDetails extends StatefulWidget {
   Task task;
 
   TaskStatus modifiedStatus = TaskStatus.Open;
   Set<Tuple2<TaskRelation, Task>> modifiedRelatedTasks = {};
 
-  TaskPage({super.key, required this.task}) {
+  TaskDetails({super.key, required this.task}) {
     modifiedStatus = task.status;
     modifiedRelatedTasks = task.relatedTasks;
   }
 
   @override
-  State<TaskPage> createState() => _TaskPageState();
+  State<TaskDetails> createState() => _TaskDetailsState();
 }
 
-class _TaskPageState extends State<TaskPage> {
+class _TaskDetailsState extends State<TaskDetails> {
   static const String _title = 'Task Details';
 
   @override
@@ -36,48 +36,7 @@ class _TaskPageState extends State<TaskPage> {
       appBar: AppBar(
         title: const Text(_title),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                showCupertinoDialog(
-                  context: context,
-                  builder: (BuildContext context) => CupertinoAlertDialog(
-                    title: const Text('Alert!'),
-                    content: const Text(
-                        'This task will be deleted from your local storage.'),
-                    actions: [
-                      CupertinoDialogAction(
-                        isDefaultAction: true,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Cancel'),
-                      ),
-                      CupertinoDialogAction(
-                        child: const Text('Delete'),
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text("Task '${widget.task.title}' deleted!"),
-                            ),
-                          );
-                          AppState.removeTaskById(widget.task.id);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MainPage()),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
-              child: const Icon(Icons.delete),
-            ),
-          ),
+          DeleteTaskButton(widget: widget),
         ],
       ),
       body: Container(
@@ -151,37 +110,38 @@ class _TaskPageState extends State<TaskPage> {
               modifiedRelatedTasks: widget.modifiedRelatedTasks,
             ),
             const Divider(),
-            ElevatedButton(
-              onPressed: () {
-                widget.task.status = widget.modifiedStatus;
-                widget.task.updateTime = DateTime.now();
-                widget.task.relatedTasks = widget.modifiedRelatedTasks;
-                for (int i = 0; i < widget.modifiedRelatedTasks.length; i++) {
-                  TaskRelation tempTaskRelation = widget.modifiedRelatedTasks
-                      .elementAt(i)
-                      .item1
-                      .relationOpposite;
-                  Task relatedTask =
-                      widget.modifiedRelatedTasks.elementAt(i).item2;
-                  relatedTask.relatedTasks
-                      .add(Tuple2(tempTaskRelation, widget.task));
-                }
-                AppState.sortTasks();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Task updated!"),
-                  ),
-                );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MainPage()),
-                );
-              },
-              child: const Text('Update task'),
-            ),
+            updateTask(context),
           ],
         ),
       ),
+    );
+  }
+
+  // updateTask method to update changes in existing task
+  ElevatedButton updateTask(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        widget.task.status = widget.modifiedStatus;
+        widget.task.updateTime = DateTime.now();
+        widget.task.relatedTasks = widget.modifiedRelatedTasks;
+        for (int i = 0; i < widget.modifiedRelatedTasks.length; i++) {
+          TaskRelation tempTaskRelation =
+              widget.modifiedRelatedTasks.elementAt(i).item1.relationOpposite;
+          Task relatedTask = widget.modifiedRelatedTasks.elementAt(i).item2;
+          relatedTask.relatedTasks.add(Tuple2(tempTaskRelation, widget.task));
+        }
+        AppState.sortTasks();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Task updated!"),
+          ),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MainPage()),
+        );
+      },
+      child: const Text('Update task'),
     );
   }
 }
