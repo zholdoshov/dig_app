@@ -7,22 +7,46 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:myapp/forms/add_task_form.dart';
+import 'package:myapp/screens/home_page.dart';
+import 'package:myapp/util/app_state.dart';
+
+class MockAppState extends Mock implements AppState {}
+
+class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MaterialApp());
+  group('The widget that lists all the tasks', (() {
+    // Empty task test
+    test('no tasks listed', () async {
+      expect(AppState.getAllTasks(), []);
+    });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Test for button navigating to createNewTask page
+    testWidgets('Button is present and triggers navigation after tapped',
+        (WidgetTester tester) async {
+      final mockObserver = MockNavigatorObserver();
+      final addTaskButton = find.byKey(const ValueKey("addTaskButton"));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: const HomePage(),
+          navigatorObservers: [mockObserver],
+        ),
+      );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      expect(addTaskButton, findsOneWidget);
+      await tester.tap(addTaskButton);
+      await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+      expect(find.byType(AddTask), findsOneWidget);
+    });
+  }));
+
+  // Each task fields test
+  group('Each task listed in the widget that lists all the tasks', (() {}));
+
+  group('The widget for creating a new task', (() {}));
+
+  group('The widget for editing an existing task', (() {}));
 }

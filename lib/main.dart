@@ -4,10 +4,10 @@ import 'package:myapp/screens/profile_page.dart';
 import 'package:myapp/screens/feed_page.dart';
 import 'package:go_router/go_router.dart';
 
-final _router = GoRouter(initialLocation: '/home', routes: [
+final routes = [
   GoRoute(
     path: '/home',
-    builder: (context, state) => const MainPage(),
+    builder: (context, state) => const HomePage(),
   ),
   GoRoute(
     path: '/feed',
@@ -17,7 +17,9 @@ final _router = GoRouter(initialLocation: '/home', routes: [
     path: '/profile',
     builder: (context, state) => const ProfilePage(),
   )
-]);
+];
+
+final _router = GoRouter(initialLocation: '/home', routes: routes);
 
 void main() {
   runApp(MaterialApp.router(

@@ -36,6 +36,7 @@ class _TaskListState extends State<TaskList> {
             children: [
               const Text('Filter by: '),
               DropdownButton<String>(
+                key: const Key("filterBy"),
                 onChanged: (String? newValue) {
                   setState(() {
                     widget._selectedFilterValue = newValue!;

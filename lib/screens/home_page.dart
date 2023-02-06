@@ -3,15 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/util/show_task_list.dart';
 import 'package:myapp/forms/add_task_form.dart';
+import 'package:go_router/go_router.dart';
+import 'package:myapp/main.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  HomePage createState() => HomePage();
+  MyHomePage createState() => MyHomePage();
 }
 
-class HomePage extends State<MainPage> {
+class MyHomePage extends State<HomePage> {
   static const String _title = 'Nurulla';
 
   int currentBotNavIndex = 0;
@@ -24,7 +26,7 @@ class HomePage extends State<MainPage> {
         leading: navMenu(context),
       ),
       body: TaskList(),
-      floatingActionButton: goToTask(context),
+      floatingActionButton: addTask(context),
       bottomNavigationBar: bottomNav(),
     );
   }
@@ -46,8 +48,9 @@ class HomePage extends State<MainPage> {
   }
 
   // goToTask method when add FloatingActionButton is pressed
-  FloatingActionButton goToTask(BuildContext context) {
+  FloatingActionButton addTask(BuildContext context) {
     return FloatingActionButton(
+      key: const Key("addTaskButton"),
       onPressed: () {
         Navigator.push(
           context,
@@ -63,7 +66,6 @@ class HomePage extends State<MainPage> {
     return BottomNavigationBar(
       currentIndex: currentBotNavIndex,
       showUnselectedLabels: false,
-      onTap: (index) => setState(() => currentBotNavIndex = index),
       // ignore: prefer_const_literals_to_create_immutables
       items: [
         const BottomNavigationBarItem(
@@ -79,6 +81,9 @@ class HomePage extends State<MainPage> {
           label: 'Profile',
         ),
       ],
+      onTap: (index) {
+        context.push(routes[index].path);
+      },
     );
   }
 }

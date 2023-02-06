@@ -119,7 +119,7 @@ class _AddTaskState extends State<AddTask> {
           );
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const MainPage()),
+            MaterialPageRoute(builder: (context) => const HomePage()),
           );
         }
       },

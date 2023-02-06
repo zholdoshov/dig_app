@@ -6,12 +6,12 @@ import 'package:myapp/models/task_relation_model.dart';
 
 class AppState {
   static final List<Task> _tasks = [
-    Task(
-        id: 0,
-        title: 'Default Task',
-        description: 'This is a built-in task',
-        status: TaskStatus.Open,
-        updateTime: DateTime.now()),
+    // Task(
+    //     id: 0,
+    //     title: 'Default Task',
+    //     description: 'This is a built-in task',
+    //     status: TaskStatus.Open,
+    //     updateTime: DateTime.now()),
   ];
 
   static final Map<TaskRelation, Task> _relatedIssues = {};
@@ -40,6 +40,10 @@ class AppState {
     _tasks.sort((Task a, Task b) =>
         b.updateTime.millisecondsSinceEpoch -
         a.updateTime.millisecondsSinceEpoch);
+  }
+
+  static List<Task> getAllTasks() {
+    return _tasks;
   }
 
   static Task getFirstTask() {

@@ -138,7 +138,7 @@ class _TaskDetailsState extends State<TaskDetails> {
         );
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const MainPage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
       },
       child: const Text('Update task'),
