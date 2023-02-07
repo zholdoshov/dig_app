@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
-import '../models/task_model.dart';
-import '../models/task_relation_model.dart';
+import '../models/task.dart';
+import '../models/task_relation.dart';
 import '../screens/task_details.dart';
 import 'app_state.dart';
 

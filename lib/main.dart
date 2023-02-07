@@ -32,6 +32,5 @@ void main() {
       ),
     ),
     title: 'Task App',
-    // home: MainPage(),
   ));
 }

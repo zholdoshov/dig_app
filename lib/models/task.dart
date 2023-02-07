@@ -1,5 +1,5 @@
-import 'package:myapp/models/task_status_model.dart';
-import 'package:myapp/models/task_relation_model.dart';
+import 'package:myapp/models/task_status.dart';
+import 'package:myapp/models/task_relation.dart';
 import 'package:tuple/tuple.dart';
 
 class Task {

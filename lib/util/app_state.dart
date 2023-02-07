@@ -1,8 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:myapp/models/task_model.dart';
-import 'package:myapp/models/task_status_model.dart';
-import 'package:myapp/models/task_relation_model.dart';
+import 'package:myapp/models/task.dart';
+import 'package:myapp/models/task_status.dart';
+import 'package:myapp/models/task_relation.dart';
 
 class AppState {
   static final List<Task> _tasks = [

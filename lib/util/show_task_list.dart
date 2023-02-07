@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/task_details.dart';
 
-import '../models/task_model.dart';
-import '../models/task_status_model.dart';
+import '../models/task.dart';
+import '../models/task_status.dart';
 import 'app_state.dart';
 
 class TaskList extends StatefulWidget {
@@ -60,6 +60,7 @@ class _TaskListState extends State<TaskList> {
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: ListView.builder(
+            key: const Key("taskList"),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemCount: widget._visibleTasks.length,
@@ -72,6 +73,7 @@ class _TaskListState extends State<TaskList> {
                 child: ListTile(
                   title: Text(task.title),
                   trailing: IconButton(
+                      key: const Key("goToTask"),
                       icon: const Icon(Icons.edit),
                       onPressed: () {
                         Navigator.push(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/models/task_model.dart';
+import 'package:myapp/models/task.dart';
 import 'package:myapp/screens/home_page.dart';
-import 'package:myapp/models/task_relation_model.dart';
-import 'package:myapp/models/task_status_model.dart';
+import 'package:myapp/models/task_relation.dart';
+import 'package:myapp/models/task_status.dart';
 import 'package:myapp/util/app_state.dart';
 import 'package:tuple/tuple.dart';
 
@@ -10,6 +10,8 @@ import 'package:tuple/tuple.dart';
 class AddTask extends StatefulWidget {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+
+  static const String _widgetTitle = 'Add task';
 
   TaskStatus modifiedStatus = TaskStatus.Open;
   Set<Tuple2<TaskRelation, Task>> modifiedRelatedTasks = {};
@@ -21,8 +23,6 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
-  static const String _widgetTitle = 'Add task';
-
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -36,7 +36,7 @@ class _AddTaskState extends State<AddTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(_widgetTitle),
+        title: const Text(AddTask._widgetTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -47,6 +47,7 @@ class _AddTaskState extends State<AddTask> {
               child: Column(
                 children: [
                   TextFormField(
+                    key: const Key('taskTitle'),
                     decoration: const InputDecoration(
                       labelText: 'Title',
                     ),
@@ -59,6 +60,7 @@ class _AddTaskState extends State<AddTask> {
                     },
                   ),
                   TextFormField(
+                    key: const Key('taskDecription'),
                     decoration: const InputDecoration(
                       labelText: 'Description',
                     ),
@@ -100,6 +102,7 @@ class _AddTaskState extends State<AddTask> {
   // createTask method for the 'Add task' button
   ElevatedButton createTask(BuildContext context) {
     return ElevatedButton(
+      key: const Key("createTaskButton"),
       onPressed: () {
         if (_formKey.currentState!.validate()) {
           AppState.addTask(widget._titleController.value.text,
