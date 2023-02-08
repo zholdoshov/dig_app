@@ -47,7 +47,7 @@ class MyHomePage extends State<HomePage> {
     );
   }
 
-  // goToTask method when add FloatingActionButton is pressed
+  // addTask method when add FloatingActionButton is pressed
   FloatingActionButton addTask(BuildContext context) {
     return FloatingActionButton(
       key: const Key("addTaskButton"),

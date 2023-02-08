@@ -68,19 +68,38 @@ class _AddRelatedIssueState extends State<AddRelatedIssue> {
                       margin: const EdgeInsets.symmetric(vertical: 5),
                       // key: ValueKey(task),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(widget.widget.task.title),
-                          Text(relatedTask.item1.value),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => TaskDetails(task: task),
-                                ),
-                              );
-                            },
-                            child: Text(relatedTask.item2.title),
+                          Container(
+                            width: 100.0,
+                            child: Text(
+                              widget.widget.task.title,
+                            ),
+                          ),
+                          Container(
+                            width: 80.0,
+                            child: Text(
+                              relatedTask.item1.value,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Container(
+                            width: 100.0,
+                            child: TextButton(
+                              key: const Key('goToRelatedTask'),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        TaskDetails(task: task),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                relatedTask.item2.title,
+                              ),
+                            ),
                           ),
                           IconButton(
                             onPressed: () {
@@ -127,6 +146,7 @@ class _AddRelatedIssueState extends State<AddRelatedIssue> {
               ).toList(),
             ),
             DropdownButton<Task>(
+              key: const Key('dropDownLink'),
               onChanged: (Task? newValue) {
                 setState(() {
                   selectedTask = newValue!;
@@ -139,7 +159,13 @@ class _AddRelatedIssueState extends State<AddRelatedIssue> {
                 (Task value) {
                   return DropdownMenuItem<Task>(
                     value: value,
-                    child: Text(value.title),
+                    child: Container(
+                      width: 150.0,
+                      child: Text(
+                        value.title,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   );
                 },
               ).toList(),
@@ -154,6 +180,7 @@ class _AddRelatedIssueState extends State<AddRelatedIssue> {
   // addRelation method to add the relation between chosen tasks
   ElevatedButton addRelation() {
     return ElevatedButton(
+      key: const Key('addRelationButton'),
       onPressed: () {
         setState(() {
           if (selectedTask != null) {

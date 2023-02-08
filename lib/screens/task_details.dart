@@ -63,7 +63,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                 children: [
                   // Task title
                   TextFormField(
-                    key: const Key('taskTitle'),
+                    key: const Key('taskTitleEdit'),
                     decoration: const InputDecoration(
                       labelText: 'Title',
                     ),
@@ -76,7 +76,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                     },
                   ),
                   TextFormField(
-                    key: const Key('taskDescription'),
+                    key: const Key('taskDescriptionEdit'),
                     decoration: const InputDecoration(
                       labelText: 'Description',
                     ),
@@ -147,6 +147,7 @@ class _TaskDetailsState extends State<TaskDetails> {
   // updateTask method to update changes in existing task
   ElevatedButton updateTask(BuildContext context) {
     return ElevatedButton(
+      key: const Key('taskUpdateButton'),
       onPressed: () {
         if (_formKey.currentState!.validate()) {
           widget.task.title = widget._titleController.value.text;
