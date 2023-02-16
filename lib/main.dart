@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 final routes = [
   GoRoute(
-    path: '/home',
+    path: '/',
     builder: (context, state) => const HomePage(),
   ),
   GoRoute(
@@ -19,7 +19,7 @@ final routes = [
   )
 ];
 
-final _router = GoRouter(initialLocation: '/home', routes: routes);
+final _router = GoRouter(initialLocation: '/', routes: routes);
 
 void main() {
   runApp(MaterialApp.router(
@@ -27,9 +27,6 @@ void main() {
     routerConfig: _router,
     theme: ThemeData(
       primarySwatch: Colors.deepPurple,
-      textTheme: const TextTheme(
-        headline1: TextStyle(color: Colors.deepPurple),
-      ),
     ),
     title: 'Task App',
   ));
