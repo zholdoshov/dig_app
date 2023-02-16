@@ -46,52 +46,12 @@ class _AddTaskState extends State<AddTask> {
               key: _formKey,
               child: Column(
                 children: [
-                  TextFormField(
-                    key: const Key('taskTitle'),
-                    decoration: const InputDecoration(
-                      labelText: 'Title',
-                    ),
-                    controller: widget._titleController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Empty field!';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    key: const Key('taskDecription'),
-                    decoration: const InputDecoration(
-                      labelText: 'Description',
-                    ),
-                    maxLines: 6,
-                    controller: widget._descriptionController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Empty field!';
-                      }
-                      return null;
-                    },
-                  ),
+                  titleField(),
+                  descriptionField(),
                 ],
               ),
             ),
-            DropdownButton<TaskStatus>(
-              onChanged: (TaskStatus? newValue) {
-                setState(() {
-                  widget.modifiedStatus = newValue!;
-                });
-              },
-              value: widget.modifiedStatus,
-              items: TaskStatus.values.map<DropdownMenuItem<TaskStatus>>(
-                (TaskStatus value) {
-                  return DropdownMenuItem<TaskStatus>(
-                    value: value,
-                    child: Text(value.name),
-                  );
-                },
-              ).toList(),
-            ),
+            statusDropdownButton(),
             createTask(context),
           ],
         ),
@@ -99,9 +59,64 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
+  TextFormField titleField() {
+    return TextFormField(
+      key: const Key('taskTitle'),
+      decoration: const InputDecoration(
+        labelText: 'Title',
+      ),
+      maxLines: null,
+      controller: widget._titleController,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Empty field!';
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField descriptionField() {
+    return TextFormField(
+      key: const Key('taskDecription'),
+      decoration: const InputDecoration(
+        labelText: 'Description',
+      ),
+      maxLines: null,
+      maxLength: 500,
+      controller: widget._descriptionController,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Empty field!';
+        }
+        return null;
+      },
+    );
+  }
+
+  DropdownButton<TaskStatus> statusDropdownButton() {
+    return DropdownButton<TaskStatus>(
+      onChanged: (TaskStatus? newValue) {
+        setState(() {
+          widget.modifiedStatus = newValue!;
+        });
+      },
+      value: widget.modifiedStatus,
+      items: TaskStatus.values.map<DropdownMenuItem<TaskStatus>>(
+        (TaskStatus value) {
+          return DropdownMenuItem<TaskStatus>(
+            value: value,
+            child: Text(value.name),
+          );
+        },
+      ).toList(),
+    );
+  }
+
   // createTask method for the 'Add task' button
-  ElevatedButton createTask(BuildContext context) {
-    return ElevatedButton(
+  MaterialButton createTask(BuildContext context) {
+    return MaterialButton(
+      color: Colors.deepPurple,
       key: const Key("createTaskButton"),
       onPressed: () {
         if (_formKey.currentState!.validate()) {
@@ -126,7 +141,8 @@ class _AddTaskState extends State<AddTask> {
           );
         }
       },
-      child: const Text('Add task'),
+      child: const Text('Add task',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
     );
   }
 }

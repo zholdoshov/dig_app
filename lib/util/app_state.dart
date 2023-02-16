@@ -5,14 +5,7 @@ import 'package:myapp/models/task_status.dart';
 import 'package:myapp/models/task_relation.dart';
 
 class AppState {
-  static final List<Task> _tasks = [
-    // Task(
-    //     id: 0,
-    //     title: 'Default Task',
-    //     description: 'This is a built-in task',
-    //     status: TaskStatus.Open,
-    //     updateTime: DateTime.now()),
-  ];
+  static final List<Task> _tasks = [];
 
   static final Map<TaskRelation, Task> _relatedIssues = {};
 

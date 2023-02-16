@@ -1,6 +1,10 @@
 // ignore_for_file: file_names, must_be_immutable
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:myapp/models/task.dart';
 import 'package:myapp/models/task_relation.dart';
 import 'package:myapp/util/app_state.dart';
@@ -34,6 +38,7 @@ class TaskDetails extends StatefulWidget {
 
 class _TaskDetailsState extends State<TaskDetails> {
   static const String _title = 'Task Details';
+  File? _image;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -57,90 +62,163 @@ class _TaskDetailsState extends State<TaskDetails> {
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  // Task title
-                  TextFormField(
-                    key: const Key('taskTitleEdit'),
-                    decoration: const InputDecoration(
-                      labelText: 'Title',
-                    ),
-                    controller: widget._titleController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Empty field!';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    key: const Key('taskDescriptionEdit'),
-                    decoration: const InputDecoration(
-                      labelText: 'Description',
-                    ),
-                    controller: widget._descriptionController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Empty field!';
-                      }
-                      return null;
-                    },
-                  ),
-                ],
-              ),
-            ),
+            taskAndDescripForm(),
             const Divider(),
-            // Task status and last updated time
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Status: '),
-                  DropdownButton<TaskStatus>(
-                    onChanged: (TaskStatus? newValue) {
-                      setState(() {
-                        widget.modifiedStatus = newValue!;
-                      });
-                    },
-                    value: widget.modifiedStatus,
-                    items: TaskStatus.values.map<DropdownMenuItem<TaskStatus>>(
-                      (TaskStatus value) {
-                        return DropdownMenuItem<TaskStatus>(
-                          value: value,
-                          child: Text(value.name),
-                        );
-                      },
-                    ).toList(),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Last update: '),
-                  Text(DateFormat('yyyy-MM-dd  kk:mm')
-                      .format(widget.task.updateTime)
-                      .toString()),
-                ],
-              ),
-            ),
+            taskStatus(),
+            lastUpdate(),
             const Divider(),
-            AddRelatedIssue(
-              widget: widget,
-              task: widget.task,
-              modifiedRelatedTasks: widget.modifiedRelatedTasks,
-            ),
+            imagePickerButton(),
+            const Divider(),
+            _image != null
+                ? Image.file(_image!)
+                : const Text("No image selected"),
+            const Divider(),
+            const Divider(),
+            addRelatedIssue(),
             const Divider(),
             updateTask(context),
           ],
         ),
       ),
+    );
+  }
+
+  Row imagePickerButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        pickImgFromGallery(),
+        pickImgFromCamera(),
+      ],
+    );
+  }
+
+  MaterialButton pickImgFromCamera() {
+    return MaterialButton(
+        color: Colors.deepPurple,
+        child: const Text("Pick Image from Camera",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        onPressed: () {
+          pickImage(ImageSource.camera);
+        });
+  }
+
+  MaterialButton pickImgFromGallery() {
+    return MaterialButton(
+        color: Colors.deepPurple,
+        child: const Text("Pick Image from Gallery",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        onPressed: () {
+          pickImage(ImageSource.gallery);
+        });
+  }
+
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+      final imageTemp = File(image.path);
+      setState(() => _image = imageTemp);
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  AddRelatedIssue addRelatedIssue() {
+    return AddRelatedIssue(
+      widget: widget,
+      task: widget.task,
+      modifiedRelatedTasks: widget.modifiedRelatedTasks,
+    );
+  }
+
+  Padding lastUpdate() {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('Last update: '),
+          Text(DateFormat('yyyy-MM-dd  kk:mm')
+              .format(widget.task.updateTime)
+              .toString()),
+        ],
+      ),
+    );
+  }
+
+  Form taskAndDescripForm() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          taskTextFormField(),
+          descriptionTextFormField(),
+        ],
+      ),
+    );
+  }
+
+  Padding taskStatus() {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('Status: '),
+          DropdownButton<TaskStatus>(
+            onChanged: (TaskStatus? newValue) {
+              setState(() {
+                widget.modifiedStatus = newValue!;
+              });
+            },
+            value: widget.modifiedStatus,
+            items: TaskStatus.values.map<DropdownMenuItem<TaskStatus>>(
+              (TaskStatus value) {
+                return DropdownMenuItem<TaskStatus>(
+                  value: value,
+                  child: Text(value.name),
+                );
+              },
+            ).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  TextFormField descriptionTextFormField() {
+    return TextFormField(
+      key: const Key('taskDescriptionEdit'),
+      decoration: const InputDecoration(
+        labelText: 'Description',
+      ),
+      maxLines: null,
+      maxLength: 500,
+      controller: widget._descriptionController,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Empty field!';
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField taskTextFormField() {
+    return TextFormField(
+      key: const Key('taskTitleEdit'),
+      decoration: const InputDecoration(
+        labelText: 'Title',
+      ),
+      maxLines: null,
+      controller: widget._titleController,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Empty field!';
+        }
+        return null;
+      },
     );
   }
 
