@@ -24,6 +24,13 @@ class MyHomePage extends State<HomePage> {
       appBar: AppBar(
         title: const Text(_title),
         leading: navMenu(context),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            tooltip: 'Scan a task',
+            icon: const Icon(Icons.qr_code_scanner),
+          ),
+        ],
       ),
       body: TaskList(),
       floatingActionButton: addTask(context),

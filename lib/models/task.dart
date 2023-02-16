@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:myapp/models/task_status.dart';
 import 'package:myapp/models/task_relation.dart';
 import 'package:tuple/tuple.dart';
@@ -9,6 +11,7 @@ class Task {
   TaskStatus status;
   DateTime updateTime;
   Set<Tuple2<TaskRelation, Task>> relatedTasks = {};
+  File? relatedImage;
 
   Task(
       {required this.id,

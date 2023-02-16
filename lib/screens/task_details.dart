@@ -12,7 +12,6 @@ import 'package:myapp/models/task_status.dart';
 import 'package:myapp/screens/home_page.dart';
 import 'package:tuple/tuple.dart';
 import 'package:intl/intl.dart';
-
 import '../util/add_related_issue.dart';
 import '../util/delete_task.dart';
 
@@ -25,11 +24,14 @@ class TaskDetails extends StatefulWidget {
   TaskStatus modifiedStatus = TaskStatus.Open;
   Set<Tuple2<TaskRelation, Task>> modifiedRelatedTasks = {};
 
+  File? _image;
+
   TaskDetails({super.key, required this.task}) {
     _titleController.text = task.title;
     _descriptionController.text = task.description;
     modifiedStatus = task.status;
     modifiedRelatedTasks = task.relatedTasks;
+    _image = task.relatedImage;
   }
 
   @override
@@ -38,7 +40,6 @@ class TaskDetails extends StatefulWidget {
 
 class _TaskDetailsState extends State<TaskDetails> {
   static const String _title = 'Task Details';
-  File? _image;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -55,6 +56,10 @@ class _TaskDetailsState extends State<TaskDetails> {
       appBar: AppBar(
         title: const Text(_title),
         actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.qr_code),
+          ),
           DeleteTaskButton(key: const Key('deleteTaskButton'), widget: widget),
         ],
       ),
@@ -69,8 +74,8 @@ class _TaskDetailsState extends State<TaskDetails> {
             const Divider(),
             imagePickerButton(),
             const Divider(),
-            _image != null
-                ? Image.file(_image!)
+            widget._image != null
+                ? Image.file(widget._image!)
                 : const Text("No image selected"),
             const Divider(),
             const Divider(),
@@ -118,7 +123,7 @@ class _TaskDetailsState extends State<TaskDetails> {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
       final imageTemp = File(image.path);
-      setState(() => _image = imageTemp);
+      setState(() => widget._image = imageTemp);
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
@@ -233,6 +238,7 @@ class _TaskDetailsState extends State<TaskDetails> {
           widget.task.status = widget.modifiedStatus;
           widget.task.updateTime = DateTime.now();
           widget.task.relatedTasks = widget.modifiedRelatedTasks;
+          widget.task.relatedImage = widget._image;
           for (int i = 0; i < widget.modifiedRelatedTasks.length; i++) {
             TaskRelation tempTaskRelation =
                 widget.modifiedRelatedTasks.elementAt(i).item1.relationOpposite;
