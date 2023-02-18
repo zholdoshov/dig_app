@@ -3,7 +3,7 @@ import 'package:myapp/models/task.dart';
 import 'package:myapp/screens/home_page.dart';
 import 'package:myapp/models/task_relation.dart';
 import 'package:myapp/models/task_status.dart';
-import 'package:myapp/util/app_state.dart';
+import 'package:myapp/util/database_helper.dart';
 import 'package:tuple/tuple.dart';
 
 // ignore: must_be_immutable
@@ -120,15 +120,16 @@ class _AddTaskState extends State<AddTask> {
       key: const Key("createTaskButton"),
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          AppState.addTask(widget._titleController.value.text,
+          DatabaseHelper.addTask(widget._titleController.value.text,
               widget._descriptionController.value.text, widget.modifiedStatus);
-          AppState.getFirstTask().relatedTasks = widget.modifiedRelatedTasks;
+          DatabaseHelper.getFirstTask().relatedTasks =
+              widget.modifiedRelatedTasks;
           for (int i = 0; i < widget.modifiedRelatedTasks.length; i++) {
             TaskRelation tempTaskRelation =
                 widget.modifiedRelatedTasks.elementAt(i).item1.relationOpposite;
             Task tempTask = widget.modifiedRelatedTasks.elementAt(i).item2;
             tempTask.relatedTasks
-                .add(Tuple2(tempTaskRelation, AppState.getFirstTask()));
+                .add(Tuple2(tempTaskRelation, DatabaseHelper.getFirstTask()));
           }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

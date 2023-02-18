@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:myapp/util/show_task_list.dart';
 import 'package:myapp/forms/add_task_form.dart';

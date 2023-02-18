@@ -5,7 +5,7 @@ import 'package:myapp/screens/task_details.dart';
 
 import '../models/task.dart';
 import '../models/task_status.dart';
-import 'app_state.dart';
+import 'database_helper.dart';
 
 class TaskList extends StatefulWidget {
   final Map<String, TaskStatus?> _filters = {
@@ -16,7 +16,7 @@ class TaskList extends StatefulWidget {
   };
 
   String _selectedFilterValue = "All";
-  List<Task> _visibleTasks = AppState.getFilteredTasks(null);
+  List<Task> _visibleTasks = DatabaseHelper.getFilteredTasks(null);
 
   TaskList({super.key});
 
@@ -41,8 +41,8 @@ class _TaskListState extends State<TaskList> {
                   onChanged: (String? newValue) {
                     setState(() {
                       widget._selectedFilterValue = newValue!;
-                      widget._visibleTasks =
-                          AppState.getFilteredTasks(widget._filters[newValue]);
+                      widget._visibleTasks = DatabaseHelper.getFilteredTasks(
+                          widget._filters[newValue]);
                     });
                   },
                   value: widget._selectedFilterValue,

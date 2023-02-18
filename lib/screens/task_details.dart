@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:myapp/models/task.dart';
 import 'package:myapp/models/task_relation.dart';
-import 'package:myapp/util/app_state.dart';
+import 'package:myapp/util/database_helper.dart';
 import 'package:myapp/models/task_status.dart';
 import 'package:myapp/screens/home_page.dart';
 import 'package:tuple/tuple.dart';
@@ -74,10 +74,7 @@ class _TaskDetailsState extends State<TaskDetails> {
             const Divider(),
             imagePickerButton(),
             const Divider(),
-            widget._image != null
-                ? Image.file(widget._image!)
-                : const Text("No image selected"),
-            const Divider(),
+            relatedPicture(),
             const Divider(),
             addRelatedIssue(),
             const Divider(),
@@ -88,9 +85,25 @@ class _TaskDetailsState extends State<TaskDetails> {
     );
   }
 
+  Column relatedPicture() {
+    return Column(
+      children: [
+        const Center(
+          child: Text(
+            'Related picture:',
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+        widget._image != null
+            ? Image.file(widget._image!)
+            : const Text("No image selected"),
+      ],
+    );
+  }
+
   Row imagePickerButton() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         pickImgFromGallery(),
         pickImgFromCamera(),
@@ -101,7 +114,7 @@ class _TaskDetailsState extends State<TaskDetails> {
   MaterialButton pickImgFromCamera() {
     return MaterialButton(
         color: Colors.deepPurple,
-        child: const Text("Pick Image from Camera",
+        child: const Text("Open Camera",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         onPressed: () {
           pickImage(ImageSource.camera);
@@ -111,7 +124,7 @@ class _TaskDetailsState extends State<TaskDetails> {
   MaterialButton pickImgFromGallery() {
     return MaterialButton(
         color: Colors.deepPurple,
-        child: const Text("Pick Image from Gallery",
+        child: const Text("Open Gallery",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         onPressed: () {
           pickImage(ImageSource.gallery);
@@ -245,7 +258,7 @@ class _TaskDetailsState extends State<TaskDetails> {
             Task relatedTask = widget.modifiedRelatedTasks.elementAt(i).item2;
             relatedTask.relatedTasks.add(Tuple2(tempTaskRelation, widget.task));
           }
-          AppState.sortTasks();
+          DatabaseHelper.sortTasks();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Task updated!"),

@@ -22,6 +22,7 @@ final routes = [
 final _router = GoRouter(initialLocation: '/', routes: routes);
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized;
   runApp(MaterialApp.router(
     debugShowCheckedModeBanner: false,
     routerConfig: _router,

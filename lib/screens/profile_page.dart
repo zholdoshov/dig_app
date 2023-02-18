@@ -1,8 +1,14 @@
 // ignore_for_file: file_names
 
+import 'dart:io';
+
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/main.dart';
-import 'package:go_router/go_router.dart';
+import 'package:myapp/models/task.dart';
+import 'package:myapp/util/database_helper.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -20,8 +26,26 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: const Center(
-        child: Text('Profile Page'),
+      body: Center(
+        child: FutureBuilder<List<Task>>(
+            future: DatabaseHelper.instance.getTasks(),
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Task>> snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: Text('Loading...'));
+              }
+              return snapshot.data!.isEmpty
+                  ? const Center(child: Text('No Tasks in List'))
+                  : ListView(
+                      children: snapshot.data!.map((task) {
+                        return Center(
+                          child: ListTile(
+                            title: Text(task.title),
+                          ),
+                        );
+                      }).toList(),
+                    );
+            }),
       ),
       bottomNavigationBar: bottomNav(),
     );
@@ -47,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ],
       onTap: (index) {
-        context.push(routes[index].path);
+        context.hash(routes[index].path);
       },
     );
   }

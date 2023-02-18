@@ -6,10 +6,10 @@ import 'package:myapp/models/task.dart';
 import 'package:myapp/models/task_status.dart';
 import 'package:myapp/screens/home_page.dart';
 import 'package:myapp/screens/task_details.dart';
-import 'package:myapp/util/app_state.dart';
+import 'package:myapp/util/database_helper.dart';
 import 'package:myapp/util/show_task_list.dart';
 
-class MockAppState extends Mock implements AppState {}
+class MockAppState extends Mock implements DatabaseHelper {}
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
@@ -19,7 +19,7 @@ void main() {
     // Empty task test
     testWidgets('no tasks listed', (WidgetTester tester) async {
       //find all widgets needed
-      final List<Task> tasks = AppState.getAllTasks();
+      final List<Task> tasks = DatabaseHelper.getAllTasks();
 
       // Build our app and trigger a frame.
       await tester.pumpWidget(const MaterialApp(

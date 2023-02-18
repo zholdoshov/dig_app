@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../screens/home_page.dart';
 import '../screens/task_details.dart';
-import 'app_state.dart';
+import 'database_helper.dart';
 
 class DeleteTaskButton extends StatelessWidget {
   const DeleteTaskButton({
@@ -41,7 +41,7 @@ class DeleteTaskButton extends StatelessWidget {
                         content: Text("Task '${widget.task.title}' deleted!"),
                       ),
                     );
-                    AppState.removeTaskById(widget.task.id);
+                    DatabaseHelper.removeTaskById(widget.task.id);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const HomePage()),

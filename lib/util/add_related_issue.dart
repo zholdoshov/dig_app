@@ -6,7 +6,7 @@ import 'package:tuple/tuple.dart';
 import '../models/task.dart';
 import '../models/task_relation.dart';
 import '../screens/task_details.dart';
-import 'app_state.dart';
+import 'database_helper.dart';
 
 class AddRelatedIssue extends StatefulWidget {
   AddRelatedIssue({
@@ -153,7 +153,7 @@ class _AddRelatedIssueState extends State<AddRelatedIssue> {
                 });
               },
               value: selectedTask,
-              items: AppState.getFilteredTasks(null)
+              items: DatabaseHelper.getFilteredTasks(null)
                   .where((element) => element != widget.task)
                   .map<DropdownMenuItem<Task>>(
                 (Task value) {
