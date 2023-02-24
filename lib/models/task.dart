@@ -20,21 +20,21 @@ class Task {
       required this.status,
       required this.updateTime});
 
-  factory Task.fromMap(Map<String, dynamic> json) => Task(
-        id: json['id'],
-        title: json['title'],
-        description: json['description'],
-        status: json['status'],
-        updateTime: json['updateTime'],
-      );
+  // factory Task.fromMap(Map<String, dynamic> json) => Task(
+  //       id: json['id'],
+  //       title: json['title'],
+  //       description: json['description'],
+  //       status: json['status'],
+  //       updateTime: json['updateTime'],
+  //     );
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-      'description': description,
-      'status': status,
-      'updateTime': updateTime,
-    };
-  }
+  // Map<String, dynamic> toMap() {
+  //   return {
+  //     'id': id,
+  //     'title': title,
+  //     'description': description,
+  //     'status': status,
+  //     'updateTime': updateTime,
+  //   };
+  // }
 }

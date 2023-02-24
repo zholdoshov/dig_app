@@ -120,6 +120,14 @@ class _AddTaskState extends State<AddTask> {
       key: const Key("createTaskButton"),
       onPressed: () {
         if (_formKey.currentState!.validate()) {
+          DatabaseHelper().createTask({
+            "title": widget._titleController.value.text,
+            "description": widget._descriptionController.value.text,
+            "status": widget.modifiedStatus.index,
+            "lastUpdate": DateTime.now().millisecondsSinceEpoch,
+            "relatedIssue": null,
+            "relatedImage": null
+          });
           DatabaseHelper.addTask(widget._titleController.value.text,
               widget._descriptionController.value.text, widget.modifiedStatus);
           DatabaseHelper.getFirstTask().relatedTasks =

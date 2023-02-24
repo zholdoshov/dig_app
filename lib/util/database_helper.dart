@@ -1,51 +1,38 @@
-import 'dart:io';
-
-import 'package:sqflite/sqflite.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:myapp/models/task.dart';
 import 'package:myapp/models/task_status.dart';
 import 'package:myapp/models/task_relation.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class DatabaseHelper {
-  DatabaseHelper._privateConstructor();
-  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
-
-  static Database? _database;
-  Future<Database> get database async => _database ??= await _initDatabase();
-
-  Future<Database> _initDatabase() async {
-    Directory documentDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentDirectory.path, 'tasks.db');
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _onCreate,
-    );
-  }
-
-  Future _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE tasks(
-        id INTEGER PRIMARY KEY,
-        title TEXT,
-        description TEXT,
-        status TEXT,
-        updateTime TEXT
-      )
-    ''');
-  }
-
-  Future<List<Task>> getTasks() async {
-    Database db = await instance.database;
-    var tasks = await db.query('tasks', orderBy: 'updateTime');
-    List<Task> taskList =
-        tasks.isEmpty ? tasks.map((e) => Task.fromMap(e)).toList() : [];
-    return taskList;
-  }
-
   static final List<Task> _tasks = [];
+
+  List<Map<String, dynamic>> _listTask = [];
+
+  List<Map<String, dynamic>> getListTask() {
+    return _listTask.toList();
+  }
+
+  final _taskBox = Hive.box('task_box');
+
+  void refreshItems() {
+    final data = _taskBox.keys.map((key) {
+      final item = _taskBox.get(key);
+      return {
+        "key": key,
+        "title": item["title"],
+        "description": item["description"],
+        "status": item["status"],
+        "lastUpdate": item["lastUpdate"]
+      };
+    }).toList();
+    _listTask = data.reversed.toList();
+    print(_listTask.length);
+  }
+
+  Future<void> createTask(Map<String, dynamic> newTask) async {
+    await _taskBox.add(newTask);
+    refreshItems();
+  }
 
   static final Map<TaskRelation, Task> _relatedIssues = {};
 

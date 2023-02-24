@@ -134,6 +134,7 @@ class _TaskDetailsState extends State<TaskDetails> {
   Future pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
+
       if (image == null) return;
       final imageTemp = File(image.path);
       setState(() => widget._image = imageTemp);
